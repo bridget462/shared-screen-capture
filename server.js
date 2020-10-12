@@ -25,6 +25,10 @@ io.on("connection", (socket) => {
     // notify except itself
     socket.to(roomId).broadcast.emit("user-connected", userId);
     console.log("socket connection detected: ", roomId, userId);
+
+    socket.on("disconnect", () => {
+      socket.to(roomId).broadcast.emit("user-disconnected", userId);
+    });
   });
 });
 

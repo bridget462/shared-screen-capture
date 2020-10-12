@@ -40,6 +40,10 @@ socket.on("user-connected", (userId) => {
   console.log("new user connected: ", userId);
 });
 
+socket.on("user-disconnected", (userId) => {
+  console.log("user-disconnected: ", userId);
+});
+
 function connectToNewUser(userId, stream) {
   // sending my video to other user
   const call = myPeer.call(userId, stream);
