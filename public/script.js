@@ -14,13 +14,40 @@ myPeer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id);
 });
 
-navigator.mediaDevices.getDisplayMedia().then((stream) => {
-  addVideoStream(myVideo, stream);
-});
+// TODO change to screen capture stream
+navigator.mediaDevices
+  .getUserMedia({ video: true, audio: false })
+  .then((stream) => {
+    // adding own video stream to own page
+    addVideoStream(myVideo, stream);
+
+    // responding other user's request and sending my video
+    myPeer.on("call", (call) => {
+      call.answer(stream);
+    });
+
+    // sharing own stream to new user which connected to the same room
+    socket.on("user-connected", (userId) => {
+      connectToNewUser(userId, stream);
+    });
+  });
 
 socket.on("user-connected", (userId) => {
   console.log("new user connected: ", userId);
 });
+
+function connectToNewUser(userId, stream) {
+  // sending my video to other user
+  const call = myPeer.call(userId, stream);
+  // receiving other video
+  const video = document.createElement("video");
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(video, userVideoStream);
+  });
+  call.on("close", () => {
+    video.remove();
+  });
+}
 
 function addVideoStream(video, stream) {
   video.srcObject = stream;
