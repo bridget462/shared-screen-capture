@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 
 app.get("/:room", (req, res) => {
   // pass roomId to client
-  res.render("room", { roomId: req.params.room });
+  res.render("room-page", { roomId: req.params.room });
 });
 
 server.listen(3000);
