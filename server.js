@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     // notify except itself
     socket.to(roomId).broadcast.emit("user-connected", userId);
-    console.log(roomId, userId);
+    console.log("socket connection detected: ", roomId, userId);
   });
 });
 
