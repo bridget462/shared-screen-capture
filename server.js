@@ -21,6 +21,9 @@ app.get("/:room", (req, res) => {
 io.on("connection", (socket) => {
   // this function is called from client
   socket.on("join-room", (roomId, userId) => {
+    socket.join(roomId);
+    // notify except itself
+    socket.to(roomId).broadcast.emit("user-connected", userId);
     console.log(roomId, userId);
   });
 });
