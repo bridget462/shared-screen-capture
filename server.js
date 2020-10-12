@@ -17,4 +17,12 @@ app.get("/:room", (req, res) => {
   res.render("room-page", { roomId: req.params.room });
 });
 
+// socket event listeners
+io.on("connection", (socket) => {
+  // this function is called from client
+  socket.on("join-room", (roomId, userId) => {
+    console.log(roomId, userId);
+  });
+});
+
 server.listen(3000);
