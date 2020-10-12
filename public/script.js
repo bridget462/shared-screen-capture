@@ -24,6 +24,10 @@ navigator.mediaDevices
     // responding other user's request and sending my video
     myPeer.on("call", (call) => {
       call.answer(stream);
+      const video = document.createElement("video");
+      call.on("stream", (userVideoStream) => {
+        addVideoStream(video, userVideoStream);
+      });
     });
 
     // sharing own stream to new user which connected to the same room
