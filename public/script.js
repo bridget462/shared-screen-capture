@@ -8,6 +8,7 @@ const myPeer = new Peer(undefined, {
 
 const myVideo = document.createElement("video");
 myVideo.muted = true;
+const peers = [];
 
 // when client connected to peer server and get id, call this
 myPeer.on("open", (id) => {
@@ -42,6 +43,9 @@ socket.on("user-connected", (userId) => {
 
 socket.on("user-disconnected", (userId) => {
   console.log("user-disconnected: ", userId);
+  if (peers[userId]) {
+    peers[userId].close();
+  }
 });
 
 function connectToNewUser(userId, stream) {
@@ -55,6 +59,8 @@ function connectToNewUser(userId, stream) {
   call.on("close", () => {
     video.remove();
   });
+
+  peers[userId] = call;
 }
 
 function addVideoStream(video, stream) {
